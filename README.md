@@ -11,7 +11,7 @@ This project implements a real-time, low-complexity transmitter and receiver cha
 
 ---
 
-## 🏗️ Core Architecture & System Blocks
+##  Core Architecture & System Blocks
 
 The complete system pipeline—from digital baseband processing to the hybrid switching layer—is designed according to the following hardware architecture:
 
