@@ -16,63 +16,70 @@ This project implements a real-time, low-complexity transmitter and receiver cha
 The complete system pipeline—from digital baseband processing to the hybrid switching layer—is designed according to the following hardware architecture:
 
 ```text
+                                 
                                     ╔════════════════════════╗
                                     ║       Input Data       ║
                                     ╚═══════════╦════════════╝
                                                 ║
                                                 ▼
                                     ╔════════════════════════╗
-                                    ║   QPSK / QAM Mapper    ║
+                                    ║    QAM / QPSK Mapper   ║ <--- [Paper 1]
                                     ╚═══════════╦════════════╝
                                                 ║
                                                 ▼
                                     ╔════════════════════════╗
-                                    ║   Serial to Parallel   ║
+                                    ║   Serial to Parallel   ║ <--- [Paper 1]
                                     ╚═══════════╦════════════╝
                                                 ║
                                                 ▼
                                     ╔════════════════════════╗
-                                    ║          IFFT          ║
+                                    ║          IFFT          ║ <--- [Paper 1 + 2]
                                     ║     (OFDM Symbol)      ║
                                     ╚═══════════╦════════════╝
                                                 ║
                                                 ▼
                                     ╔════════════════════════╗
-                                    ║   Add Cyclic Prefix    ║
+                                    ║   Add Cyclic Prefix    ║ <--- [Paper 1 + 2]
                                     ╚═══════════╦════════════╝
                                                 ║
                                                 ▼
                           ╔═════════════════════╩═════════════════════╗
-                          ║       Hybrid RF / Optical Switch          ║
+                          ║      Hybrid Switching Control Layer       ║ <--- [Paper 4]
                           ╚═══════════╦═══════════════════╦═══════════╝
                                       ║                   ║
-                               RF Path║                   ║Optical Path
+                               RF Path║                   ║Optical Path [Paper 3]
                                       ║                   ║
                                       ▼                   ▼
                             ╔══════════════════╗ ╔══════════════════╗
-                            ║     RF Tx/Rx     ║ ║     LED / PD     ║
+                            ║  RF Path (Tx/Rx) ║ ║  Optical LED /PD ║
+                            ║    [Paper 2]     ║ ║    [Paper 3]     ║
                             ╚═════════╦════════╝ ╚════════╦═════════╝
                                       ║                   ║
                                       ╚═════════╦═════════╝
                                                 ║
                                                 ▼
                           ╔═════════════════════╩═════════════════════╗
-                          ║             Receiver Section              ║
+                          ║         Receiver DSP Engine Layer         ║ <--- [Paper 2]
                           ╚═════════════════════╦═════════════════════╝
                                                 ║
                                                 ▼
                                     ╔════════════════════════╗
-                                    ║       Remove CP        ║
+                                    ║       Remove CP        ║ <--- [Paper 1 + 2]
                                     ╚═══════════╦════════════╝
                                                 ║
                                                 ▼
                                     ╔════════════════════════╗
-                                    ║          FFT           ║
+                                    ║          FFT           ║ <--- [Paper 1 + 2]
                                     ╚═══════════╦════════════╝
                                                 ║
                                                 ▼
                                     ╔════════════════════════╗
-                                    ║      QAM Demapper      ║
+                                    ║      QAM Demapper      ║ <--- [Paper 1]
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║   NOMA/OFDMA Demux     ║ <--- [Paper 5]
                                     ╚═══════════╦════════════╝
                                                 ║
                                                 ▼
