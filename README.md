@@ -10,7 +10,6 @@ Multi-carrier modulation like **DCO-OFDM** is highly spectrally efficient but su
 This project implements a real-time, low-complexity transmitter and receiver chain on FPGA, incorporating joint digital signal processing (DSP) optimization frameworks to curb distortion, mitigate hardware nonlinearity, and minimize FPGA resource utilization.
 
 ---
----
 
 ## 🏗️ Core Architecture & System Blocks
 
