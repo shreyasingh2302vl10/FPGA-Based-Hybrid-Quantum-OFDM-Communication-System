@@ -10,72 +10,73 @@ Multi-carrier modulation like **DCO-OFDM** is highly spectrally efficient but su
 This project implements a real-time, low-complexity transmitter and receiver chain on FPGA, incorporating joint digital signal processing (DSP) optimization frameworks to curb distortion, mitigate hardware nonlinearity, and minimize FPGA resource utilization.
 
 ---
+---
 
-##  Core Architecture & System Blocks
+## 🏗️ Core Architecture & System Blocks
 
 The complete system pipeline—from digital baseband processing to the hybrid switching layer—is designed according to the following hardware architecture:
 
 ```text
-                              ╔════════════════════════╗
-                              ║       Input Data       ║
-                              ╚═══════════╦════════════╝
-                                          ║
-                                          ▼
-                              ╔════════════════════════╗
-                              ║   QPSK / QAM Mapper    ║
-                              ╚═══════════╦════════════╝
-                                          ║
-                                          ▼
-                              ╔════════════════════════╗
-                              ║   Serial to Parallel   ║
-                              ╚═══════════╦════════════╝
-                                          ║
-                                          ▼
-                              ╔════════════════════════╗
-                              ║          IFFT          ║
-                              ║     (OFDM Symbol)      ║
-                              ╚═══════════╦════════════╝
-                                          ║
-                                          ▼
-                              ╔════════════════════════╗
-                              ║   Add Cyclic Prefix    ║
-                              ╚═══════════╦════════════╝
-                                          ║
-                                          ▼
-                    ╔═════════════════════╩═════════════════════╗
-                    ║       Hybrid RF / Optical Switch          ║
-                    ╚═══════════╦═══════════════════╦═══════════╝
-                                ║                   ║
-                         RF Path║                   ║Optical Path
-                                ║                   ║
-                                ▼                   ▼
-                      ╔══════════════════╗ ╔══════════════════╗
-                      ║     RF Tx/Rx     ║ ║     LED / PD     ║
-                      ╚═════════╦════════╝ ╚════════╦═════════╝
-                                ║                   ║
-                                ╚═════════╦═════════╝
-                                          ║
-                                          ▼
-                    ╔═════════════════════╩═════════════════════╗
-                    ║             Receiver Section              ║
-                    ╚═════════════════════╦═════════════════════╝
-                                          ║
-                                          ▼
-                              ╔════════════════════════╗
-                              ║       Remove CP        ║
-                              ╚═══════════╦════════════╝
-                                          ║
-                                          ▼
-                              ╔════════════════════════╗
-                              ║          FFT           ║
-                              ╚═══════════╦════════════╝
-                                          ║
-                                          ▼
-                              ╔════════════════════════╗
-                              ║      QAM Demapper      ║
-                              ╚═══════════╦════════════╝
-                                          ║
-                                          ▼
-                              ╔════════════════════════╗
-                              ║      Output Bits       ║
-                              ╚════════════════════════╝
+                                    ╔════════════════════════╗
+                                    ║       Input Data       ║
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║   QPSK / QAM Mapper    ║
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║   Serial to Parallel   ║
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║          IFFT          ║
+                                    ║     (OFDM Symbol)      ║
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║   Add Cyclic Prefix    ║
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                          ╔═════════════════════╩═════════════════════╗
+                          ║       Hybrid RF / Optical Switch          ║
+                          ╚═══════════╦═══════════════════╦═══════════╝
+                                      ║                   ║
+                               RF Path║                   ║Optical Path
+                                      ║                   ║
+                                      ▼                   ▼
+                            ╔══════════════════╗ ╔══════════════════╗
+                            ║     RF Tx/Rx     ║ ║     LED / PD     ║
+                            ╚═════════╦════════╝ ╚════════╦═════════╝
+                                      ║                   ║
+                                      ╚═════════╦═════════╝
+                                                ║
+                                                ▼
+                          ╔═════════════════════╩═════════════════════╗
+                          ║             Receiver Section              ║
+                          ╚═════════════════════╦═════════════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║       Remove CP        ║
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║          FFT           ║
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║      QAM Demapper      ║
+                                    ╚═══════════╦════════════╝
+                                                ║
+                                                ▼
+                                    ╔════════════════════════╗
+                                    ║      Output Bits       ║
+                                    ╚════════════════════════╝
