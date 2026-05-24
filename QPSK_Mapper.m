@@ -1,4 +1,4 @@
-```verilog 
+ 
 module qpsk_mapper (
     input  wire       clk,
     input  wire       rst_n,
@@ -38,4 +38,4 @@ module qpsk_mapper (
         end
     end
 endmodule
-```
+
