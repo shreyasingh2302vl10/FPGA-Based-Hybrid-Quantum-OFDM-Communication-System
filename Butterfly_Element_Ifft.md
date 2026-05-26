@@ -1,4 +1,7 @@
 # LOGIC FLOW
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/214f6d8ff73c928d119c240968d61f43797a3952/butterfly_ifft_daigram.png)
+
+## Pictorial Represenation of the CODE
 ![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/1d19166594b56394acb60a804cce05691701376d/Butterfly_ifft.png)
 # CODE
 ```verilog 
