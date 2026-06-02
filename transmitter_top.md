@@ -1,3 +1,4 @@
+```verilog
 `timescale 1ns / 1ps
 
 module transmitter_top_with_ifft_8point (
@@ -75,3 +76,4 @@ module transmitter_top_with_ifft_8point (
     );
 
 endmodule
+```
