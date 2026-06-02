@@ -86,3 +86,19 @@ The complete system pipeline—from digital baseband processing to the hybrid sw
                                     ╔════════════════════════╗
                                     ║      Output Bits       ║
                                     ╚════════════════════════╝
+```
+---
+
+# HOW TO RUN THIS 
+```verilog
+add_wave /tb_transmitter_top_with_ifft_8point/uut/u_qpsk_mapper/qpsk_I
+add_wave /tb_transmitter_top_with_ifft_8point/uut/u_qpsk_mapper/qpsk_Q
+add_wave /tb_transmitter_top_with_ifft_8point/uut/u_serial_to_parallel/parallel_I
+add_wave /tb_transmitter_top_with_ifft_8point/uut/u_serial_to_parallel/parallel_Q
+add_wave /tb_transmitter_top_with_ifft_8point/uut/w_parallel_valid
+add_wave /tb_transmitter_top_with_ifft_8point/uut/ip_in_tdata
+
+# Restart aur run
+restart
+run 3000ns
+```
