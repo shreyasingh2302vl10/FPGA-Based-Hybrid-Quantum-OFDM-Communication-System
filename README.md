@@ -91,14 +91,31 @@ The complete system pipeline—from digital baseband processing to the hybrid sw
 
 # HOW TO RUN THIS 
 ```verilog
-add_wave /tb_transmitter_top_with_ifft_8point/uut/u_qpsk_mapper/qpsk_I
-add_wave /tb_transmitter_top_with_ifft_8point/uut/u_qpsk_mapper/qpsk_Q
-add_wave /tb_transmitter_top_with_ifft_8point/uut/u_serial_to_parallel/parallel_I
-add_wave /tb_transmitter_top_with_ifft_8point/uut/u_serial_to_parallel/parallel_Q
-add_wave /tb_transmitter_top_with_ifft_8point/uut/w_parallel_valid
-add_wave /tb_transmitter_top_with_ifft_8point/uut/ip_in_tdata
+# Clear out everything from the wave window to start fresh
+remove_wave [get_waves *]
 
-# Restart aur run
+# --- SECTION 1: GLOBAL CONTROL SIGNALS (From Testbench) ---
+add_wave_divider "SYSTEM CONTROLS"
+add_wave /tb_transmitter_top/clk
+add_wave /tb_transmitter_top/rst_n
+add_wave /tb_transmitter_top/valid_in
+add_wave /tb_transmitter_top/data_in
+
+# --- SECTION 2: MAPPER OUTPUTS ---
+add_wave_divider "QPSK MAPPER SIGNALS"
+add_wave /tb_transmitter_top/uut/u_mapper/qpsk_I
+add_wave /tb_transmitter_top/uut/u_mapper/qpsk_Q
+add_wave /tb_transmitter_top/uut/u_mapper/valid_out
+
+# --- SECTION 3: FINAL PARALLEL OUTPUTS ---
+add_wave_divider "PARALLEL OUTPUT BUS"
+add_wave /tb_transmitter_top/parallel_I
+add_wave /tb_transmitter_top/parallel_Q
+add_wave /tb_transmitter_top/parallel_valid
+
+# --- RESTART & RUN ---
 restart
 run 3000ns
+
+
 ```
