@@ -4,6 +4,8 @@
 
 # CODE
 ```verilog
+`timescale 1ns / 1ps
+
 module qpsk_mapper (
     input  wire       clk,
     input  wire       rst_n,
@@ -17,40 +19,31 @@ module qpsk_mapper (
     reg        bit_phase;
     reg        buffer_bit;
 
-    always @(posedge clk or negedge rst_n)
-                begin
-                    if (!rst_n)
-                                begin
-                                            bit_phase  <= 1'b0;
-                                            buffer_bit <= 1'b0;
-                                            qpsk_I     <= 2'b00;
-                                            qpsk_Q     <= 2'b00;
-                                            valid_out  <= 1'b0;
-                                end
-                    else
-                                begin
-                                                if (valid_in)
-                                                    begin
-                                                        if (bit_phase == 1'b0)
-                                                                        begin
-                                                                                buffer_bit <= data_in;
-                                                                                bit_phase  <= 1'b1;
-                                                                                valid_out  <= 1'b0;
-                                                                        end
-                                                         else
-                                                                         begin
-                                                                                bit_phase <= 1'b0;
-                                                                                valid_out <= 1'b1;
-                                                                                
-                                                                                qpsk_I <= (buffer_bit == 1'b0) ? 2'b01 : 2'b11;
-                                                                                qpsk_Q <= (data_in    == 1'b0) ? 2'b01 : 2'b11;
-                                                                         end
-                                                     end
-                                                else
-                                                        begin
-                                                                         valid_out <= 1'b0;
-                                                        end
-                                    end
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            bit_phase  <= 1'b0;
+            buffer_bit <= 1'b0;
+            qpsk_I     <= 2'b00;
+            qpsk_Q     <= 2'b00;
+            valid_out  <= 1'b0;
+        end else begin
+            if (valid_in) begin
+                if (bit_phase == 1'b0) begin
+                    buffer_bit <= data_in;
+                    bit_phase  <= 1'b1;
+                    valid_out  <= 1'b0;
+                end else begin
+                    bit_phase <= 1'b0;
+                    valid_out <= 1'b1;
+                    
+                    // Map bits to symbols (0 -> 2'b01 [-1], 1 -> 2'b11 [+1])
+                    qpsk_I <= (buffer_bit == 1'b0) ? 2'b01 : 2'b11;
+                    qpsk_Q <= (data_in    == 1'b0) ? 2'b01 : 2'b11;
                 end
+            end else begin
+                valid_out <= 1'b0;
+            end
+        end
+    end
 endmodule
 ```
