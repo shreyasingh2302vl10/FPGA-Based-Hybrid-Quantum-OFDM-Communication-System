@@ -1,3 +1,4 @@
+# CODE
 ```verilog
 module transmitter_top (
     input  wire clk,
