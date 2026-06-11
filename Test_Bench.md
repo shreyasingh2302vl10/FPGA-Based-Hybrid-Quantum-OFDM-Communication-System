@@ -1,6 +1,30 @@
+# INPUT
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/59a8545b92e8182d7d2607cb4d5287fd1d877e9c/Screenshot%202026-06-12%20032209.png
+)
+### Transmitter I/Q Symbols:
+    I  Q
+    01 11
+    11 11
+    11 11
+    11 01
+    11 11
+    01 11
+    11 01
+    11 01
+# OUTPUT
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/59a8545b92e8182d7d2607cb4d5287fd1d877e9c/Screenshot%202026-06-12%20032846.png)
+### Recieved Output
+    ff80ff00
+    005bffa5
+    ff00ff80
+    005b015b
+    ff800000
+    ffa5005b
+    00000180
+    ffa500a5
+# CODE 
 ```verilog
 `timescale 1ns / 1ps
-
 module tb_transmitter;
     reg clk;
     reg rst_n;
