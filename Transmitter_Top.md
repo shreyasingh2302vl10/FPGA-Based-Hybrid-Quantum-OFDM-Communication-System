@@ -1,5 +1,8 @@
 # INPUT
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/59a8545b92e8182d7d2607cb4d5287fd1d877e9c/Screenshot%202026-06-12%20032209.png
+)
 # OUTPUT
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/59a8545b92e8182d7d2607cb4d5287fd1d877e9c/Screenshot%202026-06-12%20032846.png)
 # CODE
 ```verilog
 module transmitter_top (
