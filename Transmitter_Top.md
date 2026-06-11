@@ -1,3 +1,5 @@
+# INPUT
+# OUTPUT
 # CODE
 ```verilog
 module transmitter_top (
