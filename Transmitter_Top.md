@@ -36,7 +36,7 @@ module transmitter_top (
     // IFFT IP Instance (Make sure port names match YOUR IP)
     xfft_0 u_ifft (
         .aclk(clk),
-        .s_axis_config_tdata(8'b00000001), // '1' means Inverse FFT (IFFT)
+        .s_axis_config_tdata(8'b00000000), // '0' means Inverse FFT (IFFT)
         .s_axis_config_tvalid(1'b1),
         .s_axis_data_tdata(w_axis_tdata),
         .s_axis_data_tvalid(w_axis_tvalid),
