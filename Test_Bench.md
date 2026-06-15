@@ -1,5 +1,5 @@
 # INPUT
-![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/59a8545b92e8182d7d2607cb4d5287fd1d877e9c/Screenshot%202026-06-12%20032209.png
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/39d9ce4e0652a90e04abe3ea82ab185ccafc4d52/Transmitter.png
 )
 ### Transmitter I/Q Symbols:
     I  Q
@@ -12,7 +12,7 @@
     11 01
     11 01
 # OUTPUT
-![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/59a8545b92e8182d7d2607cb4d5287fd1d877e9c/Screenshot%202026-06-12%20032846.png)
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/39d9ce4e0652a90e04abe3ea82ab185ccafc4d52/OUTPUT.png)
 ### Recieved Output
     ff80ff00
     005bffa5
