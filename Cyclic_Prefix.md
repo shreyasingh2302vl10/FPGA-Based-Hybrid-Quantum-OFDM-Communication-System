@@ -1,4 +1,4 @@
-# FFT_Block Settings
+# IFFT_Block Settings
 ### BEFORE CP
 ![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/38dd775c39bbe0032a09fcd033ca84799710c27a/Without_Cyclic_Prefix.png
 )
