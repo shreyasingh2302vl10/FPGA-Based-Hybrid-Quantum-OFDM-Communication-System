@@ -8,14 +8,14 @@ module reciever_top(
     input  wire        rx_valid_in,      // Direct IFFT valid input
     output wire [31:0] fft_out_tdata,
     output wire        fft_out_tvalid,
-    // ✅ FIX 1: Final output ports ko module list mein add kiya
+   
     output wire [1:0]  final_rx_bits,
     output wire        final_rx_valid
 );
 
     // FFT Frame tracking counter (For 8-point FFT)
     reg [2:0] sample_counter;
-    wire      internal_tlast; // ✅ Reg se badalkar wire kiya for exact timing
+    wire      internal_tlast; 
 
     // --- Dynamic TLAST Generation Logic ---
     always @(posedge clk or negedge rst_n) begin
@@ -32,15 +32,7 @@ module reciever_top(
         end
     end
 
-    // ✅ FIX 2: Continuous assignment taaki exact 8th sample ke sath hi tlast HIGH ho, bina kisi clock delay ke!
-    assign internal_tlast = (rx_valid_in && (sample_counter == 3'd7));
-
-    // =========================================================================
-    // ✅ FIX 3: EXACT CONFIGURATION FOR 8-POINT FFT MODE (16'h0007)
-    // Bit [0]   = FWD_INV = 1'b1 (1 means Forward FFT mode for Receiver)
-    // Bits [5:1] = NFFT    = 5'b00011 (Beech ki do bits ON = 3, jisse length 8 hoti hai)
-    // Combined Binary: 0000_0000_0011_1111 => Hex: 16'h0007
-    // =========================================================================
+ 
     wire [15:0] w_config_tdata = 16'h0007;
 
     // --- Xilinx FFT Block Instantiation ---
