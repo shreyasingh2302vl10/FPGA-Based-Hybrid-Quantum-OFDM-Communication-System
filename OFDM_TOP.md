@@ -21,7 +21,13 @@ module ofdm_top (
     
     // --- Parsed Receiver Outputs (I/Q Split) ---
     output wire [7:0]  rx_fft_I_out,
-    output wire [7:0]  rx_fft_Q_out
+    output wire [7:0]  rx_fft_Q_out,
+
+    // --- Demapper Outputs (2-bit Symbol Interface) ---
+    output wire [7:0]  mapped_I_out,
+    output wire [7:0]  mapped_Q_out,
+    output wire [1:0]  rx_demap_2bit_out, // Updated: [1]=I bit, [0]=Q bit
+    output wire        rx_demap_valid
 );
 
     // =============================================================
@@ -109,7 +115,7 @@ module ofdm_top (
     );
 
     // =============================================================
-    // 4. Receiver Output Mapping
+    // 4. Receiver Output Mapping & QPSK Demapper Instantiation
     // =============================================================
     assign rx_fft_out_tdata  = w_rx_fft_tdata;
     assign rx_fft_out_tvalid = w_rx_fft_tvalid;
@@ -118,6 +124,18 @@ module ofdm_top (
     // Direct Extraction: [7:0] Real (I) and [15:8] Imaginary (Q)
     assign rx_fft_I_out      = w_rx_fft_tdata[7:0];
     assign rx_fft_Q_out      = w_rx_fft_tdata[15:8];
+
+    // QPSK Demapper Instance
+    qpsk_demapper u_demapper (
+        .clk            (clk),
+        .rst_n          (rst_n),
+        .fft_tdata_in   (rx_fft_out_tdata),
+        .fft_tvalid_in  (rx_fft_out_tvalid),
+        .mapped_I_out   (mapped_I_out),
+        .mapped_Q_out   (mapped_Q_out),
+        .demap_2bit_out (rx_demap_2bit_out), // Paired 2-bit symbol output
+        .demap_valid    (rx_demap_valid)
+    );
 
 endmodule
 ```
