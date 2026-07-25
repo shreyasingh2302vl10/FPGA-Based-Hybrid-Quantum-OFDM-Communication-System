@@ -1,3 +1,6 @@
+# CIRCUIT DESIGN
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/31304e5d0ad2faeb51c7013e28ecc7ff91276337/Circuit_Design.png)
+# CODE-Top Module
 ```verilog
 `timescale 1ns / 1ps
 
