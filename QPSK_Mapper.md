@@ -11,20 +11,24 @@ module qpsk_mapper (
     input  wire       rst_n,
     input  wire       data_in,
     input  wire       valid_in,
-    output reg [1:0]  qpsk_I,
-    output reg [1:0]  qpsk_Q,
+    output reg [7:0]  qpsk_i,     // 8-bit output
+    output reg [7:0]  qpsk_q,     // 8-bit output
     output reg        valid_out
 );
 
-    reg        bit_phase;
-    reg        buffer_bit;
+    reg bit_phase;
+    reg buffer_bit;
+
+    // Direct 8-bit signed decimal representation
+    localparam [7:0] POSITIVE_ONE = 8'sd1;   //  1
+    localparam [7:0] NEGATIVE_ONE = -8'sd1;  // -1 (hardware me 8'b11111111 banega)
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             bit_phase  <= 1'b0;
             buffer_bit <= 1'b0;
-            qpsk_I     <= 2'b00;
-            qpsk_Q     <= 2'b00;
+            qpsk_i     <= 8'd0;
+            qpsk_q     <= 8'd0;
             valid_out  <= 1'b0;
         end else begin
             if (valid_in) begin
@@ -36,9 +40,9 @@ module qpsk_mapper (
                     bit_phase <= 1'b0;
                     valid_out <= 1'b1;
                     
-                    // Map bits to symbols (0 -> 2'b01 [-1], 1 -> 2'b11 [+1])
-                    qpsk_I <= (buffer_bit == 1'b0) ? 2'b01 : 2'b11;
-                    qpsk_Q <= (data_in    == 1'b0) ? 2'b01 : 2'b11;
+                    // Bit mapping: 0 -> -1, 1 -> +1
+                    qpsk_i <= (buffer_bit == 1'b0) ? NEGATIVE_ONE : POSITIVE_ONE;
+                    qpsk_q <= (data_in    == 1'b0) ? NEGATIVE_ONE : POSITIVE_ONE;
                 end
             end else begin
                 valid_out <= 1'b0;
