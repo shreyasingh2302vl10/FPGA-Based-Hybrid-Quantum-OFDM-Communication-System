@@ -1,3 +1,5 @@
+# MODULE SETTINGS
+![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/b06c36ab2035f599ddaf5b9363afbf074170f3d2/Module_Settings.png)
 # QPSK FORMATTER
 ```verilog
 `timescale 1ns / 1ps
