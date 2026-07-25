@@ -16,35 +16,4 @@ This project implements a real-time, low-complexity transmitter and receiver cha
 The complete system pipeline—from digital baseband processing to the hybrid switching layer—is designed according to the following hardware architecture:
 ![image](https://github.com/shreyasingh2302vl10/FPGA-Based-Hybrid-Quantum-OFDM-Communication-System/blob/cb6f4bab3b6d8f9479c1797c65960ea23b04bbbe/Latest_Architecture.png)
 
----
 
-# HOW TO RUN THIS 
-```verilog
-# Clear out everything from the wave window to start fresh
-remove_wave [get_waves *]
-
-# --- SECTION 1: GLOBAL CONTROL SIGNALS (From Testbench) ---
-add_wave_divider "SYSTEM CONTROLS"
-add_wave /tb_transmitter_top/clk
-add_wave /tb_transmitter_top/rst_n
-add_wave /tb_transmitter_top/valid_in
-add_wave /tb_transmitter_top/data_in
-
-# --- SECTION 2: MAPPER OUTPUTS ---
-add_wave_divider "QPSK MAPPER SIGNALS"
-add_wave /tb_transmitter_top/uut/u_mapper/qpsk_I
-add_wave /tb_transmitter_top/uut/u_mapper/qpsk_Q
-add_wave /tb_transmitter_top/uut/u_mapper/valid_out
-
-# --- SECTION 3: FINAL PARALLEL OUTPUTS ---
-add_wave_divider "PARALLEL OUTPUT BUS"
-add_wave /tb_transmitter_top/parallel_I
-add_wave /tb_transmitter_top/parallel_Q
-add_wave /tb_transmitter_top/parallel_valid
-
-# --- RESTART & RUN ---
-restart
-run 3000ns
-
-
-```
