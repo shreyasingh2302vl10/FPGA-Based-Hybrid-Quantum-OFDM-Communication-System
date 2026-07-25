@@ -26,86 +26,131 @@
 ```verilog
 `timescale 1ns / 1ps
 
-module tb_ofdm_top();
+module tb_ofdm_top;
 
-   
-    reg clk;
-    reg rst_n;
-    
-    // Inputs to the OFDM System
-    reg data_in;
-    reg valid_in;
+    // -------------------------------------------------------------
+    // Testbench Clock & Reset Signals
+    // -------------------------------------------------------------
+    reg        clk;
+    reg        rst_n;
 
-    // Outputs from the OFDM System
-    wire [31:0] final_fft_data;
-    wire        final_fft_valid;
+    // -------------------------------------------------------------
+    // Transmitter Inputs
+    // -------------------------------------------------------------
+    reg        tx_data_in;
+    reg        tx_valid_in;
 
-    // 1 Symbol = 2 bits (QPSK style)
-    // Total bits for 8 symbols = 8 * 2 = 16 bits
-    parameter NUM_SYMBOLS     = 8;
-    parameter BITS_PER_SYMBOL = 2;
-    
-    integer total_bits = NUM_SYMBOLS * BITS_PER_SYMBOL; // Evaluates to 16
-    integer i;
+    // -------------------------------------------------------------
+    // Top Module Outputs
+    // -------------------------------------------------------------
+    wire [15:0] tx_ifft_out_tdata;
+    wire        tx_ifft_out_tvalid;
+    wire        tx_ifft_out_tlast;
 
-    // Instantiate the Top Module (Device Under Test)
+    wire [15:0] rx_fft_out_tdata;
+    wire        rx_fft_out_tvalid;
+    wire        rx_fft_out_tlast;
+
+    wire [7:0]  rx_fft_I_out;
+    wire [7:0]  rx_fft_Q_out;
+
+    // -------------------------------------------------------------
+    // Unit Under Test (UUT) Instance
+    // -------------------------------------------------------------
     ofdm_top uut (
-        .clk(clk),
-        .rst_n(rst_n),
-        .data_in(data_in),
-        .valid_in(valid_in),
-        .final_fft_data(final_fft_data),
-        .final_fft_valid(final_fft_valid)
+        .clk                 (clk),
+        .rst_n               (rst_n),
+        
+        // Tx Inputs
+        .tx_data_in          (tx_data_in),
+        .tx_valid_in         (tx_valid_in),
+        
+        // Tx IFFT Outputs
+        .tx_ifft_out_tdata   (tx_ifft_out_tdata),
+        .tx_ifft_out_tvalid  (tx_ifft_out_tvalid),
+        .tx_ifft_out_tlast   (tx_ifft_out_tlast),
+        
+        // Rx FFT Outputs
+        .rx_fft_out_tdata    (rx_fft_out_tdata),
+        .rx_fft_out_tvalid   (rx_fft_out_tvalid),
+        .rx_fft_out_tlast    (rx_fft_out_tlast),
+        
+        // Parsed I/Q Outputs from Receiver
+        .rx_fft_I_out        (rx_fft_I_out),
+        .rx_fft_Q_out        (rx_fft_Q_out)
     );
 
-    // 100MHz Clock Generation
+    // -------------------------------------------------------------
+    // 100 MHz Clock (10ns Period)
+    // -------------------------------------------------------------
     always #5 clk = ~clk;
 
-    // Test Sequence
+    integer i;
+    // Test Stream: Exact 16 bits = 8 QPSK Symbols (1 Frame for 8-point IFFT/FFT)
+    reg [15:0] test_bits = 16'b10_00_10_11_11_11_11_11;
+
+    // -------------------------------------------------------------
+    // Stimulus Generation
+    // -------------------------------------------------------------
     initial begin
-        // Signal Initialization
-        clk = 0;
-        rst_n = 0;
-        data_in = 0;
-        valid_in = 0;
-        
-        // Reset sequence
+        clk         = 0;
+        rst_n       = 0;
+        tx_data_in  = 0;
+        tx_valid_in = 0;
+
+        // Reset Pulse
         #50;
-        @(posedge clk);
-        rst_n <= 1;   
-        
-        // Wait for system stabilization
-        repeat(5) @(posedge clk);
-        
-        $display("Starting Simulation: Sending %0d symbols (%0d bits total)...", NUM_SYMBOLS, total_bits);
-        
-        // 1. Turn valid_in ON once at the start
-        @(posedge clk);
-        valid_in <= 1;
-        
-        // 2. Loop to stream exactly 16 bits (8 symbols)
-        for (i = 0; i < total_bits; i = i + 1) begin
-            data_in <= $random;
+        rst_n = 1;
+        #20;
+
+        $display("\n=======================================================");
+        $display("   STARTING TOP OFDM (TX IFFT + RX FFT) SIMULATION ");
+        $display("=======================================================\n");
+
+        // Drive 16 bits serially on posedge clk
+        for (i = 15; i >= 0; i = i - 1) begin
             @(posedge clk);
+            tx_data_in  <= test_bits[i];
+            tx_valid_in <= 1'b1;
         end
-        
-        // 3. Turn valid_in and data_in OFF exactly after the 16th bit
-        valid_in <= 0;
-        data_in  <= 0;
-        $display(">> Sent 8 symbols (16 bits). valid_in turned OFF. <<");
-        
-        // Wait for the pipeline processing latency to completely finish
-        $display("Waiting for FFT pipeline to flush completely...");
-        #5000;  
-        
-        $display("Simulation Finished.");
+
+        // Clear input valid after sending frame
+        @(posedge clk);
+        tx_valid_in <= 1'b0;
+        tx_data_in  <= 1'b0;
+
+        // Wait for both IFFT and FFT IP Core pipeline latencies
+        #2500;
+        $display("\n=======================================================");
+        $display("   SIMULATION FINISHED ");
+        $display("=======================================================\n");
         $finish;
     end
 
-    // Signal Monitor for Console Debugging
-    initial begin
-        $monitor("Time=%0t | Valid_in=%b | Data_in=%b | FFT_Valid=%b | FFT_Data=%h", 
-                 $time, valid_in, data_in, final_fft_valid, final_fft_data);
+    // -------------------------------------------------------------
+    // Transmitter IFFT Output Monitor
+    // -------------------------------------------------------------
+    always @(posedge clk) begin
+        if (tx_ifft_out_tvalid) begin
+            $display("[TX IFFT OUT] Time: %0t ns | Real [7:0]: %d | Imag [15:8]: %d | Last: %b", 
+                     $time, 
+                     $signed(tx_ifft_out_tdata[7:0]), 
+                     $signed(tx_ifft_out_tdata[15:8]), 
+                     tx_ifft_out_tlast);
+        end
+    end
+
+    // -------------------------------------------------------------
+    // Receiver FFT Output Monitor
+    // -------------------------------------------------------------
+    always @(posedge clk) begin
+        if (rx_fft_out_tvalid) begin
+            $display("[RX FFT  OUT] Time: %0t ns | Real_I: %d | Imag_Q: %d | Last: %b", 
+                     $time, 
+                     $signed(rx_fft_I_out), 
+                     $signed(rx_fft_Q_out), 
+                     rx_fft_out_tlast);
+        end
     end
 
 endmodule
