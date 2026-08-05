@@ -1,4 +1,4 @@
-#  Design and FPGA Implementation of a Hybrid RF-Optical Quantum-Secured OFDM Transceiver
+#  OFDM Transceiver Design and Functional Verification using Verilog
 
 Welcome to the official repository of the **Hybrid Quantum-Optical OFDM System** implemented on FPGA. This project focuses on designing a high-speed, low-latency baseband processor that integrates advanced physical layer (PHY) techniques from cutting-edge Visible Light Communication (VLC) and Underwater Optical Wireless Communication (UOWC) paradigms, tailored for quantum-secured hardware infrastructures.
 
