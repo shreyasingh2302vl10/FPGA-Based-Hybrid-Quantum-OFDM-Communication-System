@@ -1,15 +1,112 @@
-#  OFDM Transceiver Design and Functional Verification using Verilog
+# OFDM Transceiver Design and Functional Verification using Verilog
 
-Welcome to the official repository of the **Hybrid Quantum-Optical OFDM System** implemented on FPGA. This project focuses on designing a high-speed, low-latency baseband processor that integrates advanced physical layer (PHY) techniques from cutting-edge Visible Light Communication (VLC) and Underwater Optical Wireless Communication (UOWC) paradigms, tailored for quantum-secured hardware infrastructures.
+## 📖 Overview
+
+This project implements an **Orthogonal Frequency Division Multiplexing (OFDM) Transceiver** in Verilog HDL using Xilinx Vivado. The design integrates QPSK modulation/demodulation, AXI-Stream interfaces, and Xilinx FFT/IFFT IP cores to perform end-to-end OFDM transmission and reception. Functional verification is carried out using simulation waveforms in Vivado.
+
+---
+
+## ✨ Features
+
+- Verilog HDL implementation of an OFDM Transceiver
+- QPSK Modulation and Demodulation
+- Xilinx FFT/IFFT IP Core Integration
+- AXI-Stream Protocol Implementation
+- End-to-End Functional Verification
+- Vivado Simulation and Waveform Analysis
 
 ---
 
-##  Project Overview
-Multi-carrier modulation like **DCO-OFDM** is highly spectrally efficient but suffers from a severe **PAPR (Peak-to-Average Power Ratio)** problem. High PAPR drives optical transmitters (like Laser Diodes and LEDs) into their non-linear regions, causing severe signal distortion, clipping noise, and bit error rate (BER) degradation in optical and quantum transceiver components.
+## 🏗️ Transmitter Architecture
 
-This project implements a real-time, low-complexity transmitter and receiver chain on FPGA, incorporating joint digital signal processing (DSP) optimization frameworks to curb distortion, mitigate hardware nonlinearity, and minimize FPGA resource utilization.
+The transmitter performs the following operations:
+
+1. Accepts input bit stream.
+2. Maps input bits to QPSK symbols.
+3. Formats symbols using the AXI-Stream interface.
+4. Passes frequency-domain symbols through the Xilinx IFFT IP.
+5. Generates time-domain OFDM symbols for transmission.
+
+### Modules
+
+- **QPSK Mapper**
+  - Converts binary input bits into QPSK constellation symbols.
+
+- **AXI-Stream Formatter**
+  - Implements AXI-Stream handshake signals:
+    - `tvalid`
+    - `tready`
+    - `tlast`
+  - Enables reliable data transfer to the IFFT IP.
+
+- **Xilinx IFFT IP**
+  - Converts frequency-domain QPSK symbols into time-domain OFDM symbols.
 
 ---
+
+## 📡 Receiver Architecture
+
+The receiver performs the reverse OFDM processing:
+
+1. Accepts received OFDM symbols.
+2. Uses the Xilinx FFT IP to recover frequency-domain data.
+3. Demaps QPSK symbols back into binary bits.
+4. Reconstructs the transmitted bit stream.
+
+### Modules
+
+- **Xilinx FFT IP**
+  - Converts received time-domain OFDM symbols into frequency-domain symbols.
+
+- **QPSK Demapper**
+  - Extracts I/Q components.
+  - Reconstructs the original transmitted bit stream.
+
+---
+
+## ✅ Functional Verification
+
+The complete OFDM transceiver was verified using **Vivado Simulation**.
+
+Verification included:
+
+- Correct QPSK Mapping/Demapping
+- AXI-Stream Handshake Validation
+- FFT/IFFT Functional Verification
+- End-to-End Data Recovery
+- Waveform Analysis
+
+---
+
+## 🛠️ Tools and Technologies
+
+- Verilog HDL
+- Xilinx Vivado
+- Xilinx FFT IP Core
+- Xilinx IFFT IP Core
+- AXI-Stream Interface
+- Vivado Simulator
+
+---
+
+
+
+> **Note:** The directory structure above is illustrative. Adjust it to match your repository.
+
+---
+
+
+
+## 🚀 Future Improvements
+
+- Add Cyclic Prefix (CP) insertion and removal.
+- Support higher-order modulation schemes (16-QAM, 64-QAM).
+- Implement channel estimation and equalization.
+- Introduce pilot subcarriers.
+- Add BER performance analysis under AWGN and fading channels.
+
+---
+
 
 ##  Core Architecture & System Blocks
 
